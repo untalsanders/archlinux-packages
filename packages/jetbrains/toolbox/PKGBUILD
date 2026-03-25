@@ -1,0 +1,41 @@
+# Maintainer: Sanders Gutiérrez <ing.sanders@gmail.com>
+
+pkgname=jetbrains-toolbox
+pkgver=3.4.1.78303
+pkgrel=1
+pkgdesc='Manage all your JetBrains Projects and Tools'
+arch=('x86_64' 'i686')
+url='https://www.jetbrains.com/toolbox/'
+license=('custom:jetbrains')
+depends=(
+  fuse
+  glib2
+  libxslt
+  libxss
+  nss
+  org.freedesktop.secrets
+  xcb-util-keysyms
+  xdg-utils
+)
+optdepends=('xdg-utils: open URLs')
+options=('!strip' '!debug')
+source=("https://download.jetbrains.com/toolbox/${pkgname}-${pkgver}.tar.gz"
+        jetbrains-toolbox.desktop
+        icon.svg
+        LICENSE)
+
+b2sums=('f98ef5fddf3627eda3d7d4a08ec2ab8fe5a494251c0262f61d56cdade5f4dadd840d84a83a37d78784130d3f25a19989963afb679346d8564f57bf6271318b91'
+        '897ff5598f10acc4b144dad9033c7eeef31eebe77bd6268554c517e42cf7ca7396c111a2dc1a3029e5fe42e2a867f0bbeaed948338e8ce7dc25c06761165a25f'
+        '4b10487746fcb7f328cbdc8b17432f82618c5695baee4ef30e23ff3c4d4b6096daf2fcdfb4c1e2e179e2e61f68bbd88104e5df5a2e6e969aad0a68a75cfff496'
+        'b3219792df4688ce502b9e052f26807a22e27b7c2b86b17b1b95d484aad48ff6f268a39f93f285ae3622b29349b994524ea8f6018eb4a21b25a6930a064954f2')
+
+package() {
+  install -dm755 "${pkgdir}"/usr/bin/ "${pkgdir}"/opt/${pkgname}
+  install -Dm644 "${srcdir}"/${pkgname}.desktop "${pkgdir}"/usr/share/applications/${pkgname}.desktop
+  install -Dm644 "${srcdir}"/icon.svg "${pkgdir}"/usr/share/pixmaps/${pkgname}.svg
+  install -Dm644 LICENSE "${pkgdir}"/usr/share/licenses/${pkgname}/LICENSE.txt
+
+  cp -ar "${srcdir}"/${pkgname}-${pkgver}/bin/* "${pkgdir}"/opt/${pkgname}/
+
+  ln -s /opt/${pkgname}/${pkgname} "${pkgdir}"/usr/bin/${pkgname}
+}
